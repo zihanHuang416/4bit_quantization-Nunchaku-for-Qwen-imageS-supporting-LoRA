@@ -1,0 +1,36 @@
+import torch
+from safetensors import safe_open
+import os
+
+def load_lora_and_print_keys(lora_file_path: str) -> dict:
+    lora = {} # 初始化一个空字典来存储LoRA数据
+    # 检查文件是否存在
+    if not os.path.exists(lora_file_path):
+        print(f"错误：文件未找到于 '{lora_file_path}'")
+        return lora # 文件不存在时返回空字典
+    else:
+        try:
+            # 使用 safe_open 加载 .safetensors 文件
+            # framework="pt" 指定以 PyTorch 张量格式加载
+            # device="cpu" 指定将张量加载到 CPU 内存，以避免显存问题，之后可以手动移动到GPU
+            with safe_open(lora_file_path, framework="pt", device="cpu") as f:
+                for key in f.keys():
+                    lora[key] = f.get_tensor(key)
+                    # print(key)  #可以打印参数字典的key
+
+            print(f"成功从 '{lora_file_path}' 加载了 {len(lora)} 个张量到变量 'lora'。")
+
+        except Exception as e:
+            print(f"加载LoRA文件 '{lora_file_path}' 时发生错误：{e}")
+            return {} # 加载失败时返回空字典
+
+    return lora
+
+# --- 使用示例 ---
+if __name__ == "__main__":
+    # 定义LoRA文件路径
+    target_lora_path = "/juicefs-algorithm/juicefs_h200/hui_zhou/results/save_checkpoint/checkTrain/lora_qwen_disitll_step-4_zxy_real_synth_data/step-5000.safetensors"
+
+    # 调用函数加载LoRA并打印键
+    loaded_lora_data = load_lora_and_print_keys(target_lora_path)
+
