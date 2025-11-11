@@ -14,6 +14,6 @@ docker：registry.intsig.net/zihan_huang/svdquant_lora
 
 5.激活conda环境 conda activate nunchaku
 
-6. 设置好各项参数路径（模型参数、lora参数、output）
+6.设置好各项参数路径（模型参数、lora参数、output）
 
-7. python /nunchaku-main/examples/v1/qwen-image.py
+7.python /nunchaku-main/examples/v1/qwen-image.py
